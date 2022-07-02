@@ -14,12 +14,5 @@ def root():
 async def send_message(message:str):
     message_model=MessageModel()
     pred=message_model.predict(message=message)
-    print(pred)
-
     return pred
 
-
-
-
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="127.0.0.1", port=8000)

@@ -2,7 +2,6 @@ import os
 import re
 from nltk.stem import WordNetLemmatizer
 import pickle
-from pathlib import Path
 
 class MessageModel():
     class_name = os.path.basename(__file__)
@@ -24,7 +23,6 @@ class MessageModel():
 
 
     def predict(self,message):
-        print(message)
         a = self.preprocess(message)
         example_counts = self.vectorizer.transform([a])
         prediction = self.mnb.predict(example_counts)
