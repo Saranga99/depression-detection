@@ -2,15 +2,17 @@ import os
 import re
 from nltk.stem import WordNetLemmatizer
 import pickle
-
+from pathlib import Path
 
 class MessageModel():
     class_name = os.path.basename(__file__)
 
     def __init__(self) -> None:
         self.wo = WordNetLemmatizer()
-        self.mnb=pickle.load(open("../models/message_model/prediction.pkl", 'rb'))
-        self.vectorizer=pickle.load(open("../models/message_model/vectorizer.pkl", 'rb'))
+        filename="prediction.sav"
+        self.mnb=pickle.load(open(filename,'rb'))
+        filename="vectorizer.sav"
+        self.vectorizer=pickle.load(open(filename,'rb'))
 
 
     def preprocess(self,data):
