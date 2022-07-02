@@ -15,6 +15,7 @@ async def send_message(message:str):
     message_model=MessageModel()
     pred=message_model.predict(message=message)
     print(pred)
+
     return pred
 
 

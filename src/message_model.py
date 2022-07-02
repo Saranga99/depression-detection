@@ -9,10 +9,8 @@ class MessageModel():
 
     def __init__(self) -> None:
         self.wo = WordNetLemmatizer()
-        filename="prediction.sav"
-        self.mnb=pickle.load(open(filename,'rb'))
-        filename="vectorizer.sav"
-        self.vectorizer=pickle.load(open(filename,'rb'))
+        self.mnb=pickle.load(open("models/message_model/prediction.sav",'rb'))
+        self.vectorizer=pickle.load(open("models/message_model/vectorizer.sav",'rb'))
 
 
     def preprocess(self,data):
@@ -26,7 +24,12 @@ class MessageModel():
 
 
     def predict(self,message):
+        print(message)
         a = self.preprocess(message)
         example_counts = self.vectorizer.transform([a])
         prediction = self.mnb.predict(example_counts)
-        return prediction
+        if prediction[0]==0:
+            return "positive"
+        elif prediction[0]==1:
+            return "depressive"
+        
