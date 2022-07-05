@@ -16,6 +16,8 @@ from nltk.stem import WordNetLemmatizer
 from keras.models import model_from_json
 from sklearn.preprocessing import LabelEncoder
 
+
+# text classification
 class MessageModel():
     class_name = os.path.basename(__file__)
 
@@ -45,6 +47,7 @@ class MessageModel():
             return "depressive"
         
 
+# video classification
 class VideoModel():
     class_name = os.path.basename(__file__)
 
@@ -74,5 +77,54 @@ class VideoModel():
 
         score_comparisons = pd.DataFrame(self.emotions, columns = ['Human Emotions'])
         score_comparisons['Emotion Value from the Video'] = emotions_values
-        
+
         return score_comparisons
+
+
+# audio classification
+class AudioModel():
+    class_name = os.path.basename(__file__)
+
+    def __init__(self) -> None:
+        my_clip = mp.VideoFileClip("data/data.mp4")
+        my_clip.audio.write_audiofile("data/v1_audio.wav")
+
+        json_file = open('models/voice_model/model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        self.loaded_model = model_from_json(loaded_model_json)
+
+        # load weights into new model
+        self.loaded_model.load_weights("models/voice_model/aug_noiseNshift_2class2_np.h5")
+    
+
+    def predict_audio(self, audio_path):
+        model = self.loaded_model
+        data_test = pd.DataFrame(columns=['feature'])
+
+        X, sample_rate = librosa.load(audio_path , res_type='kaiser_fast',duration=3,sr=22050*2,offset=0.5)
+        #     X = X[10000:90000]
+        sample_rate = np.array(sample_rate)
+        mfccs = np.mean(librosa.feature.mfcc(y=X, sr=sample_rate, n_mfcc=13), axis=0)
+        feature = mfccs
+        data_test.loc[0] = [feature]
+            
+        test_valid = pd.DataFrame(data_test['feature'].values.tolist())
+        test_valid = np.array(test_valid)
+        # test_valid_lb = np.array(data2_df.label)
+        lb = LabelEncoder()
+        # test_valid_lb = np_utils.to_categorical(lb.fit_transform(test_valid_lb))
+        test_valid = np.expand_dims(test_valid, axis=2)
+
+        preds = model.predict(test_valid, 
+                                batch_size=16, 
+                                verbose=1)
+        preds1=preds.argmax(axis=1)
+        abc = preds1.astype(int).flatten()
+        # predictions = (lb.inverse_transform((abc)))
+        if abc == 0:
+            label = 'Negative'
+        elif abc == 1:
+            label = 'Positive'
+        return (label)
+
