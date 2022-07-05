@@ -8,8 +8,8 @@ class MessageModel():
 
     def __init__(self) -> None:
         self.wo = WordNetLemmatizer()
-        self.mnb=pickle.load(open("models/message_model/prediction.sav",'rb'))
-        self.vectorizer=pickle.load(open("models/message_model/vectorizer.sav",'rb'))
+        self.mnb=pickle.load(open("models/message_model/prediction.pkl",'rb'))
+        self.vectorizer=pickle.load(open("models/message_model/vectorizer.pkl",'rb'))
 
 
     def preprocess(self,data):
