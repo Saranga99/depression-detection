@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from src.message_model import MessageModel
+from src.utils import MessageModel, VideoModel
 
 app = FastAPI()
 
@@ -11,8 +11,14 @@ def root():
 
 
 @app.post("/messageModel/")
-async def send_message(message:str):
+async def message(message:str):
     message_model=MessageModel()
     pred=message_model.predict(message=message)
+    return pred
+
+@app.post("/video/")
+async def video(path:str):
+    video_model=VideoModel()
+    pred=video_model.predict_using_video(video_path="/data/data.mp4")
     return pred
 
