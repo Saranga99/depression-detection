@@ -35,7 +35,7 @@ async def video():
     #save graphs
     graphs="graphs/"
     os.makedirs(graphs,exist_ok=True)
-    graph_1.get_figure().savefig("graphs/graph_1.png")
+    graph_1[0].get_figure().savefig("graphs/graph_1.png")
     graph_2.get_figure().savefig("graphs/graph_2.png")
     pie_chart.get_figure().savefig("graphs/pie_chart.png")
     #check dipression
