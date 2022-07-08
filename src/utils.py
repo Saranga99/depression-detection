@@ -123,7 +123,7 @@ class AudioModel():
         abc = preds1.astype(int).flatten()
         # predictions = (lb.inverse_transform((abc)))
         if abc == 0:
-            label = 'Negative'
+            label = 'Depressive'
         elif abc == 1:
             label = 'Positive'
         return (label)
